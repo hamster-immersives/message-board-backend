@@ -15,4 +15,13 @@ postController.addCommentToPostByID
 
 router.delete('/delete-comment-by-id/:postID/:commentID', passport.authenticate('jwt-user',{ session: false }), postController.deleteCommentByID)
 
+router.put('/like-post-by-id', passport.authenticate('jwt-user',{ session: false }), 
+    postController.likePostByID
+)
+
+router.put('/unlike-post-by-id', passport.authenticate('jwt-user',{ session: false }), 
+    postController.unlikePostByID
+)
+
+
 module.exports = router;

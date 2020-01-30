@@ -145,5 +145,45 @@ module.exports = {
             res.status(500).json(dbErrorHelper(e));
         }
 
+    },
+    likePostByID: async (req, res) => {
+
+        try {
+
+            let postID = req.body.postID;
+
+            let success = await Post.findByIdAndUpdate(postID, {
+                                                                $push: {
+                                                                    likes: req.user._id
+                                                                }
+                                                               },
+                                                               {new: true}
+                                                        );
+            res.json(success)
+
+
+        } catch (e) {
+            res.status(500).json(dbErrorHelper(e));
+        }
+
+    },
+    unlikePostByID: async (req, res) => {
+        
+        try {
+            let postID = req.body.postID;
+            let success = await Post.findByIdAndUpdate(postID, {
+                                                                    $pull: {
+                                                                        likes: req.user._id
+                                                                    }
+                                                              
+                                                                }, 
+                                                                {new: true}
+                                                                )
+            res.json(success)
+        } catch (e) {
+            console.log(e)
+            res.status(500).json(dbErrorHelper(e));
+        }
+
     }
 }
