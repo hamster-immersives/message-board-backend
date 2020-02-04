@@ -26,7 +26,9 @@ var UserSchema = new mongoose.Schema({
     userCreated: {
         type: String, 
         default: now.format('dddd, MMMM Do YYYY, h:mm:ss a')
-    }
+    },
+    following: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
+    followers: [{type: mongoose.Schema.ObjectId, ref: 'User'}]
 });
 
 module.exports = mongoose.model('User', UserSchema);
