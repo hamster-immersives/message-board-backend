@@ -140,7 +140,63 @@ module.exports = {
             message: dbErrorMessage(e)
         })
     }
+  },
+  removeFollowingUser: async (req, res, next) => {
 
+    try {
+
+        const unfollowID = req.body.user._id;
+        await User.findByIdAndUpdate(req.user._id, {$pull: {following: unfollowID}})
+        next();
+    } catch (e) {
+        res.status(400).json({
+            message: dbErrorMessage(e)
+        })
+    }
+
+  },
+  removeFollowersUser: async (req, res) => {
+
+    try {
+
+        const unfollowID = req.body.user._id;
+        let success = await User.findByIdAndUpdate(unfollowID, {$pull: {followers: req.user._id }}, {new: true})
+              .select('-__v -userCreated -password')
+
+        res.json(success)
+    } catch (e) {
+        res.status(400).json({
+            message: dbErrorMessage(e)
+        })
+    }
+
+  },
+  getUserByID: async (req, res) => {
+
+    try {
+
+        let fetchUserProfile = await User.findById({_id: req.params.id})
+                                         .populate('followers', '_id username email')
+                                         .select('-__v -password')
+                                         .exec();
+        
+        let fetchUserPost = await Post.find({postedBy: req.params.id})
+                                      .populate('postedBy', '_id username email')
+                                      .populate('comments.postedBy', '_id username')
+                                      .sort('-created')
+                                      .exec();
+        let success = {
+            fetchUserProfile,
+            fetchUserPost
+        }     
+        
+        res.json(success)
+
+    } catch (e) {
+        res.status(400).json({
+            message: dbErrorMessage(e)
+        })
+    }
 
   }
 }

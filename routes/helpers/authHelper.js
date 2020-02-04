@@ -21,7 +21,8 @@ async function createJwtToken(user) {
     payload = {
         id: user._id, 
         email: user.email, 
-        username: user.username
+        username: user.username,
+        userCreated: user.userCreated
     };
 
     let jwtToken = await jwt.sign(payload, process.env.USER_SECRET_KEY, {

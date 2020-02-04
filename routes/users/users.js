@@ -14,4 +14,9 @@ router.get('/get-all-users', passport.authenticate('jwt-user',{ session: false }
 
 router.put('/follow-user', passport.authenticate('jwt-user',{ session: false }), userController.addFollowingUser, userController.addFollowUser)
 
+router.put('/unfollow-user', passport.authenticate('jwt-user',{ session: false }), userController.removeFollowingUser, userController.removeFollowersUser);
+
+router.get('/get-user-by-id/:id', passport.authenticate('jwt-user',{ session: false }), userController.getUserByID)
+
+
 module.exports = router;
